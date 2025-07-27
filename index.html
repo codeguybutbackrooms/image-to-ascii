@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image to ASCII Art Converter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Image to ASCII Art Converter</h1>
+    <input type="file" id="imageInput" accept="image/png, image/jpeg" />
+
+    <label for="deviceSelect">Which device are you using?</label>
+    <select id="deviceSelect">
+      <option value="desktop">Desktop</option>
+      <option value="tablet">Tablet</option>
+      <option value="mobile">Mobile</option>
+    </select>
+
+    <label for="asciiWidth">Width</label>
+    <input type="text" id="asciiWidth" placeholder="auto or number" />
+
+    <label for="asciiHeight">Height</label>
+    <input type="text" id="asciiHeight" placeholder="auto or number" />
+
+    <label for="asciiChars">ASCII Characters</label>
+    <input type="text" id="asciiChars" placeholder="@#S%?*+;:,." />
+
+    <label for="asciiPreset">Preset</label>
+    <select id="asciiPreset">
+      <option value="detailed">Detailed</option>
+      <option value="smooth">Smooth</option>
+      <option value="blocky">Blocky</option>
+    </select>
+
+    <label><input type="checkbox" id="useColor" /> Use Color</label>
+
+    <button onclick="convertImage()">Convert</button>
+
+    <div id="asciiArtContainer"></div>
+
+    <div class="embed-options">
+      <label for="embedMode">Embed Mode:</label>
+      <select id="embedMode">
+        <option value="normal">Normal</option>
+        <option value="fullscreen">Fullscreen</option>
+        <option value="halfscreen">Half-screen</option>
+      </select>
+    </div>
+
+    <label for="embedCode">Embeddable HTML</label>
+    <textarea id="embedCode" readonly></textarea>
+  </div>
+
+  <button id="download-btn">📥 Download HTML</button>
+
+  <script src="script.js"></script>
+  <script src="download.js"></script>
+</body>
+</html>
