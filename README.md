@@ -1,39 +1,19 @@
 # 🖼️ Image to ASCII Art Converter
 
-A responsive web app that converts images into customizable ASCII art with support for color, presets, PNG transparency, and embeddable output code.
+An Image to ASCII Art Generator with some external features
 
----
+## ⭐ Features
+1. Image to ASCII art
+2. Character Presets: Style the ASCII art
+3. Characters: Decides which character will able in art
+4. Colors: Enable colors or no colors for art
+5. Font size: Decides the size of the art
+6. RGB/Hex/HSV/HSL Converter: Change the color value
+7. Embeddable HTML: Save the art as HTML code
 
-## ✨ Features
-
-- 🎨 **Custom ASCII Characters**: Use your own set of characters or select a preset style (`blocky`, `smooth`, `detailed`, etc.)
-- 📏 **Adjustable Output Size**: Set custom `width` and `height`, or use `"auto"` to preserve image ratio.
-- 🌈 **Color Mode**: Toggle colored output based on pixel color or switch to monochrome.
-- 🧼 **Transparent PNG Support**: Automatically skips pixels with `alpha = 0` in PNGs.
-- 📱 **Device Optimized Output**: Select your device (Desktop, Tablet, Mobile) for best-fit font size.
-- 🧩 **Embeddable Code Generator**: Create styled HTML snippets with options like:
-  - `Default` size
-  - `Fullscreen` (fits entire device screen)
-  - `Half-screen` (fits half of the screen)
-- 💾 **Export**: Download ASCII result as HTML.
-
----
-
-## 🛠️ Usage
-
-1. **Upload Image**: Choose `.png`, `.jpg`, or `.jpeg` files.
-2. **Adjust Options**:
-   - Width & Height (`auto` or number)
-   - ASCII Characters (e.g., `@#S%?*+;:,.`)
-   - Color output: On/Off
-   - Style Presets
-   - Device type: Desktop, Tablet, or Mobile
-3. **View ASCII Art** in the result box.
-4. **Copy or Download** the generated HTML/CSS from the `Embeddable Code` section.
-
----
-
+<i>New features coming soon</i>
 ## 📸 Screenshots
+This is an example that I used Shrek's image
 
 | Upload & Options | Output | Embeddable Code |
 |------------------|--------|-----------------|
