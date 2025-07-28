@@ -139,7 +139,7 @@
       <button class="tab-btn active" data-format="rgb">RGB</button>
       <button class="tab-btn" data-format="hex">HEX</button>
       <button class="tab-btn" data-format="hsl">HSL</button>
-      <button class="tab-btn" data-format="hsv">HSV</button>
+      <button class="tab-btn" data-format="hsla">HSLA</button>
     </div>
 
     <label for="embedCode">Embeddable HTML</label>
@@ -222,7 +222,7 @@
               switch (currentFormat) {
                 case "hex": color = rgbToHex(r, g, b); break;
                 case "hsl": color = rgbToHsl(r, g, b); break;
-                case "hsv": color = rgbToHsv(r, g, b); break;
+                case "hsla": color = rgbToHsla(r, g, b); break;
                 default: color = `rgb(${r},${g},${b})`;
               }
               ascii += `<span style="color:${color}">${char}</span>`;
@@ -274,14 +274,16 @@
       return `hsl(${Math.round(h * 360)},${Math.round(s * 100)}%,${Math.round(l * 100)}%)`;
     }
 
-    function rgbToHsv(r, g, b) {
+    function rgbToHsla(r, g, b, a = 1) {
       r /= 255; g /= 255; b /= 255;
       let max = Math.max(r, g, b), min = Math.min(r, g, b);
-      let h, s, v = max;
-      let d = max - min;
-      s = max == 0 ? 0 : d / max;
-      if (max == min) h = 0;
-      else {
+      let h, s, l = (max + min) / 2;
+
+      if (max === min) {
+        h = s = 0;
+      } else {
+        let d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
         switch (max) {
           case r: h = (g - b) / d + (g < b ? 6 : 0); break;
           case g: h = (b - r) / d + 2; break;
@@ -289,8 +291,10 @@
         }
         h /= 6;
       }
-      return `hsv(${Math.round(h * 360)},${Math.round(s * 100)}%,${Math.round(v * 100)}%)`;
+
+      return `hsla(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%, ${a})`;
     }
+
   </script>
 </body>
 </html>
