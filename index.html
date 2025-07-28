@@ -126,7 +126,11 @@
     <label for="charSet">Characters:</label>
     <input type="text" id="charSet" value="?"><br>
 
-    <button class="colorBtn" id="toggleColor">Active Colors</button>
+    <button class="colorBtn" id="toggleColor">Colors On/Off</button>
+    <label>
+      Include Transparent Pixels
+      <input type="checkbox" id="includeAlpha" checked />
+    </label>
     <label for="fontSize">Font Size:</label>
     <input type="range" id="fontSize" min="8" max="24" value="12" />
     <span id="fontSizeLabel">12px</span>
@@ -155,6 +159,7 @@
     const presetSelect = document.getElementById("presetSelect");
     const fontSizeInput = document.getElementById("fontSize");
     const fontSizeLabel = document.getElementById("fontSizeLabel");
+    const includeAlphaCheckbox = document.getElementById("includeAlpha");
     let useColor = false;
     let currentFormat = "rgb";
 
@@ -162,6 +167,7 @@
       useColor = !useColor;
       document.getElementById("toggleColor").textContent = useColor ? "Colors On" : "Colors Off";
     };
+    
 
     fontSizeInput.addEventListener("input", () => {
       asciiContainer.style.fontSize = `${fontSizeInput.value}px`;
@@ -180,9 +186,14 @@
         document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         currentFormat = btn.dataset.format;
+        if (useColor) {
+          recolorAscii();
+        }
         generateEmbed();
       });
     });
+
+
 
     function convertImage() {
       const file = imageInput.files[0];
@@ -191,11 +202,11 @@
       const img = new Image();
       const reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         img.src = e.target.result;
       };
 
-      img.onload = function() {
+      img.onload = function () {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const width = 100;
@@ -207,37 +218,59 @@
 
         const data = ctx.getImageData(0, 0, width, height).data;
         const chars = charSetInput.value || " .:-=+*#%@";
+        const includeTransparent = document.getElementById("includeAlpha").checked;
+
         let ascii = "";
+
         for (let y = 0; y < height; y++) {
           for (let x = 0; x < width; x++) {
             const i = (y * width + x) * 4;
             const r = data[i];
             const g = data[i + 1];
             const b = data[i + 2];
+            const a = data[i + 3] / 255;
+            if (!includeTransparent && a === 0) {
+              ascii += "&nbsp;";
+              continue;
+            }
+
             const avg = (r + g + b) / 3;
             const char = chars[Math.floor((avg / 255) * (chars.length - 1))];
 
             if (useColor) {
               let color;
-              switch (currentFormat) {
-                case "hex": color = rgbToHex(r, g, b); break;
-                case "hsl": color = rgbToHsl(r, g, b); break;
-                case "hsla": color = rgbToHsla(r, g, b); break;
-                default: color = `rgb(${r},${g},${b})`;
+              if (a === 0) {
+                switch (currentFormat) {
+                  case "hex": color = "#ffffff"; break;
+                  case "hsl": color = "hsl(0, 0%, 100%)"; break;
+                  case "hsla": color = "hsla(0, 0%, 100%, 1)"; break;
+                  default: color = "rgb(255, 255, 255)";
+                }
+              } else {
+                switch (currentFormat){
+                  case "hex": color = rgbToHex(r, g, b); break;
+                  case "hsl": color = rgbToHsl(r, g, b); break;
+                  case "hsla": color = rgbToHsla(r, g, b, a); break;
+                  default: color = `rgb(${r}, ${g}, ${b})`;
+                }
               }
-              ascii += `<span style="color:${color}">${char}</span>`;
+              ascii += `<span style="color: ${color}">${char}</span>`;
             } else {
               ascii += char;
             }
+
+
           }
           ascii += "<br/>";
         }
+
         asciiContainer.innerHTML = ascii;
         generateEmbed();
       };
 
       reader.readAsDataURL(file);
     }
+
 
     function generateEmbed() {
       const fontSize = fontSizeInput.value || 12;
