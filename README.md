@@ -7,9 +7,10 @@ An Image to ASCII Art Generator with some external features
 2. Character Presets: Style the ASCII art
 3. Characters: Decides which character will able in art
 4. Colors: Enable colors or no colors for art
-5. Font size: Decides the size of the art
-6. RGB/Hex/HSV/HSL Converter: Change the color value
-7. Embeddable HTML: Save the art as HTML code
+5. Include Transparent Pixels: Enable draw the background of png file
+6. Font size: Decides the size of the art
+7. RGB/Hex/HSL/HSLA Converter: Change the color value
+8. Embeddable HTML: Save the art as HTML code
 
 <i>New features coming soon</i>
 ## 📸 Screenshots
@@ -25,6 +26,9 @@ First version ever.
 #### Version 1.0.1
 - Remove HSV because HSV doesn't work propertly in HTML.
 - HSLA color format added.
+#### Version 1.0.2
+- Add Include Transparent Pixels
+- Make the change color formats more efficient.
 
 
 
