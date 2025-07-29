@@ -131,6 +131,18 @@
       Include Transparent Pixels
       <input type="checkbox" id="includeAlpha" checked />
     </label>
+    <label>
+      Super Detailed Mode
+      <input type="checkbox" id="superDetailMode" />
+    </label>
+    <label>
+      Invert Colors
+      <input type="checkbox" id="invertColor" />
+    </label>
+
+
+
+
     <label for="fontSize">Font Size:</label>
     <input type="range" id="fontSize" min="8" max="24" value="12" />
     <span id="fontSizeLabel">12px</span>
@@ -160,12 +172,13 @@
     const fontSizeInput = document.getElementById("fontSize");
     const fontSizeLabel = document.getElementById("fontSizeLabel");
     const includeAlphaCheckbox = document.getElementById("includeAlpha");
+
     let useColor = false;
     let currentFormat = "rgb";
 
     document.getElementById("toggleColor").onclick = () => {
       useColor = !useColor;
-      document.getElementById("toggleColor").textContent = useColor ? "Colors On" : "Colors Off";
+      document.getElementById("toggleColor").textContent = useColor ? "Colors Off" : "Colors On";
     };
     
 
@@ -209,8 +222,12 @@
       img.onload = function () {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        const width = 100;
-        const height = Math.floor(img.height * (width / img.width));
+        const superMode = document.getElementById("superDetailMode").checked;
+        const baseWidth = superMode ? 300 : 100;
+        const aspectRatio = img.height / img.width;
+        const width = baseWidth;
+        const height = Math.floor(baseWidth * aspectRatio * 0.55);
+
 
         canvas.width = width;
         canvas.height = height;
@@ -219,22 +236,32 @@
         const data = ctx.getImageData(0, 0, width, height).data;
         const chars = charSetInput.value || " .:-=+*#%@";
         const includeTransparent = document.getElementById("includeAlpha").checked;
+        const invert = document.getElementById("invertColor")?.checked || false;
+
 
         let ascii = "";
 
         for (let y = 0; y < height; y++) {
           for (let x = 0; x < width; x++) {
             const i = (y * width + x) * 4;
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
+            let r = data[i];
+            let g = data[i + 1];
+            let b = data[i + 2];
             const a = data[i + 3] / 255;
+
+            if (invert) {
+              r = 255 - r;
+              g = 255 - g;
+              b = 255 - b;
+            }
             if (!includeTransparent && a === 0) {
               ascii += "&nbsp;";
               continue;
             }
 
-            const avg = (r + g + b) / 3;
+            let avg = (r + g + b) / 3;
+            if (invert) avg = 255 - avg;
+
             const char = chars[Math.floor((avg / 255) * (chars.length - 1))];
 
             if (useColor) {
